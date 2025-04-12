@@ -1,19 +1,20 @@
 package com.BarberClub.controllers;
 
-import com.BarberClub.DTOs.AuthDTO;
+import com.BarberClub.DTOs.LoginDTO;
+import com.BarberClub.DTOs.LoginResponseDTO;
 import com.BarberClub.DTOs.RegisterDTO;
+import com.BarberClub.infra.ExceptionHandler.Exceptions.EmailAlreadyExistsException;
+import com.BarberClub.infra.TokenService;
 import com.BarberClub.models.User;
 import com.BarberClub.repositories.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -25,27 +26,54 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private TokenService tokenService;
+
     @PostMapping("/register")
-    public ResponseEntity registerUser (@RequestBody @Valid RegisterDTO dto){
+    public ResponseEntity<?> registerUser(@RequestBody @Valid RegisterDTO dto) {
 
-        if(this.userRepository.findByEmail(dto.email()) != null)
-            return ResponseEntity.badRequest().build();
+        try {
+            if (userRepository.findByEmail(dto.email()) != null) {
+                throw new EmailAlreadyExistsException("Usuário já cadastrado com esse email");
+            }
 
-        String encryptedPassword = new BCryptPasswordEncoder().encode(dto.password());
-        User newUSer = new User(dto.email(), encryptedPassword, dto.role());
+            String encryptedPassword = new BCryptPasswordEncoder().encode(dto.password());
 
-        this.userRepository.save(newUSer);
+            User newUser = new User(dto.name(), dto.email(), encryptedPassword, dto.role());
 
-        return ResponseEntity.ok().build();
+            userRepository.save(newUser);
+
+            var usernamePassword = new UsernamePasswordAuthenticationToken(dto.email(), dto.password());
+
+            var auth = authenticationManager.authenticate(usernamePassword);
+
+            var token = tokenService.generateToken((User) auth.getPrincipal());
+
+            return ResponseEntity.ok(new LoginResponseDTO(token));
+        } catch (EmailAlreadyExistsException e) {
+            throw e;
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Erro ao registrar usuário: " + e.getMessage());
+        }
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AuthDTO dto){
+    public ResponseEntity<?> login(@RequestBody @Valid LoginDTO dto) {
 
-        var usernamePassword = new UsernamePasswordAuthenticationToken(dto.email(), dto.password());
+        try {
 
-        var auth = this.authenticationManager.authenticate(usernamePassword);
+            var usernamePassword = new UsernamePasswordAuthenticationToken(dto.email(), dto.password());
 
-        return ResponseEntity.ok().build();
+            var auth = authenticationManager.authenticate(usernamePassword);
+
+            var token = tokenService.generateToken((User) auth.getPrincipal());
+
+            return ResponseEntity.ok(new LoginResponseDTO(token));
+        } catch (BadCredentialsException e) {
+            throw e;
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Erro ao fazer login: " + e.getMessage());
+        }
     }
 }
+

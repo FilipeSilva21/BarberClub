@@ -1,6 +1,6 @@
 package com.BarberClub.models;
 
-import com.BarberClub.models.enums.Services;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,20 +13,22 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "tb_services")
-public class Service {
+public class Services {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long Id;
+    @Column(name = "service_id")
+    private Long serviceId;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "services")
-    private Services services;
+    private com.BarberClub.models.enums.Services services;
 
     @Column(name = "description")
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "client_id")
+    @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties("user")
     public User client;
 }

@@ -1,13 +1,14 @@
 package com.BarberClub.services;
 
 import com.BarberClub.DTOs.CreateServiceDTO;
+import com.BarberClub.infra.ExceptionHandler.Exceptions.ServiceNotFoundException;
 import com.BarberClub.models.User;
+import com.BarberClub.models.Services;
 import com.BarberClub.repositories.ServicesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ServicesService {
@@ -15,34 +16,36 @@ public class ServicesService {
     @Autowired
     private ServicesRepository servicesRepository;
 
-    public Long CreateService(CreateServiceDTO createServiceDTO, User userId){
+    public Long scheduleService(CreateServiceDTO dto, User user) {
 
-        var service = new com.BarberClub.models.Service(
+        Services services = new Services(
                 null,
-                createServiceDTO.services(),
-                createServiceDTO.description(),
-                userId
+                dto.services(),
+                dto.description(),
+                user
         );
 
-        var serviceSaved = servicesRepository.save(service);
+        var scheduledService = servicesRepository.save(services);
 
-        return serviceSaved.getId();
+        return scheduledService.getServiceId();
     }
 
-    public Optional<com.BarberClub.models.Service> getUserById(Long id) {
-        return servicesRepository.findById(id);
-    }
-
-    public List<com.BarberClub.models.Service> getAllUsers() {
+    public List<Services> getAllServices() {
         return servicesRepository.findAll();
     }
 
-    public void cancelServiceById(Long id) {
-
-        if (!servicesRepository.existsById(id)) {
-            throw new IllegalArgumentException("Usuario com Id " + id + " nao foi encontrado");
+    public void cancelService(Long Id) {
+        if (!servicesRepository.existsById(Id)) {
+            throw new ServiceNotFoundException("Serviço com Id " + Id + " não encontrado para cancelamento.");
         }
+        servicesRepository.deleteById(Id);
+    }
 
-        servicesRepository.deleteById(id);
+    public List<Services> getServicesFromClient(Long userId) {
+        List<Services> userServices = servicesRepository.findByUserId(userId);
+        if (userServices.isEmpty()) {
+            throw new ServiceNotFoundException("Nenhum serviço encontrado para o usuário com ID " + userId);
+        }
+        return userServices;
     }
 }
