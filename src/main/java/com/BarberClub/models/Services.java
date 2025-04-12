@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,8 +27,11 @@ public class Services {
     @Column(name = "services")
     private com.BarberClub.models.enums.Services services;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "horario")
+    private LocalDateTime horario;
+
+    @Column(name = "price")
+    private int price;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

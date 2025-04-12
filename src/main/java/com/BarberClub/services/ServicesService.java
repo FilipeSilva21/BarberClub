@@ -1,6 +1,6 @@
 package com.BarberClub.services;
 
-import com.BarberClub.DTOs.CreateServiceDTO;
+import com.BarberClub.DTOs.ScheduleServiceDTO;
 import com.BarberClub.infra.ExceptionHandler.Exceptions.ServiceNotFoundException;
 import com.BarberClub.models.User;
 import com.BarberClub.models.Services;
@@ -16,12 +16,26 @@ public class ServicesService {
     @Autowired
     private ServicesRepository servicesRepository;
 
-    public Long scheduleService(CreateServiceDTO dto, User user) {
+    public Long scheduleService(ScheduleServiceDTO dto, User user, Services service) {
+
+        if (service.getServices() == com.BarberClub.models.enums.Services.Cabelo){
+            service.setPrice(40);
+        }
+        if (service.getServices() == com.BarberClub.models.enums.Services.Barba){
+            service.setPrice(20);
+        }
+        if (service.getServices() == com.BarberClub.models.enums.Services.CabeloEBarba){
+            service.setPrice(55);
+        }
+        if (service.getServices() == com.BarberClub.models.enums.Services.Sobrancelha){
+            service.setPrice(15);
+        }
 
         Services services = new Services(
                 null,
                 dto.services(),
-                dto.description(),
+                dto.horario(),
+                service.getPrice(),
                 user
         );
 

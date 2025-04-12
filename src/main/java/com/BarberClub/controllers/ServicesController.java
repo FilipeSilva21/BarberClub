@@ -1,8 +1,9 @@
 package com.BarberClub.controllers;
 
-import com.BarberClub.DTOs.CreateServiceDTO;
+import com.BarberClub.DTOs.ScheduleServiceDTO;
 import com.BarberClub.infra.ExceptionHandler.Exceptions.ServiceNotFoundException;
 import com.BarberClub.infra.ExceptionHandler.Exceptions.UserNotFoundException;
+import com.BarberClub.models.Services;
 import com.BarberClub.models.User;
 import com.BarberClub.services.ServicesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +20,10 @@ public class ServicesController {
     private ServicesService servicesService;
 
     @PostMapping("/{userId}")
-    public ResponseEntity<?> scheduleService(@RequestBody CreateServiceDTO dto, @PathVariable User userId) {
+    public ResponseEntity<?> scheduleService(@RequestBody ScheduleServiceDTO dto, @PathVariable User userId, Services services) {
 
         try {
-            var serviceId = servicesService.scheduleService(dto, userId);
+            var serviceId = servicesService.scheduleService(dto, userId, services);
 
             return ResponseEntity.created(URI.create("v1/services/" + serviceId)).build();
         } catch (UserNotFoundException | ServiceNotFoundException e) {
