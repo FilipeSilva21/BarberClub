@@ -17,7 +17,7 @@ import java.net.URI;
 public class ScheduleController {
 
     @Autowired
-    private ScheduleSer scheduleService;
+    private ScheduleService scheduleService;
 
     @PostMapping("/{userId}")
     public ResponseEntity<?> scheduleTime(@RequestBody ScheduleTimeDTO dto, @PathVariable User userId, Schedule schedule) {
