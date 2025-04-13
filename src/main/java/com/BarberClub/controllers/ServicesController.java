@@ -20,10 +20,10 @@ public class ServicesController {
     private ServicesService servicesService;
 
     @PostMapping("/{userId}")
-    public ResponseEntity<?> scheduleService(@RequestBody ScheduleServiceDTO dto, @PathVariable User userId, Services services) {
+    public ResponseEntity<?> scheduleTime(@RequestBody ScheduleServiceDTO dto, @PathVariable User userId, Services services) {
 
         try {
-            var serviceId = servicesService.scheduleService(dto, userId, services);
+            var serviceId = servicesService.scheduleTime(dto, userId, services);
 
             return ResponseEntity.created(URI.create("v1/services/" + serviceId)).build();
         } catch (UserNotFoundException | ServiceNotFoundException e) {
@@ -34,10 +34,10 @@ public class ServicesController {
     }
 
     @GetMapping
-    public ResponseEntity<?> listServices() {
+    public ResponseEntity<?> listSchedules() {
 
         try {
-            var services = servicesService.getAllServices();
+            var services = servicesService.getAllSchedules();
 
             return ResponseEntity.ok(services);
         } catch (Exception e) {
@@ -46,10 +46,10 @@ public class ServicesController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<?> getServicesFromUser(@PathVariable("userId") Long userId) {
+    public ResponseEntity<?> getSchedulesFromUser(@PathVariable("userId") Long userId) {
 
         try {
-            var services = servicesService.getServicesFromClient(userId);
+            var services = servicesService.getSchedulesFromClient(userId);
 
             return ResponseEntity.ok(services);
         } catch (UserNotFoundException e) {
@@ -60,10 +60,10 @@ public class ServicesController {
     }
 
     @DeleteMapping("/{serviceId}")
-    public ResponseEntity<?> cancelService(@PathVariable("serviceId") Long serviceId) {
+    public ResponseEntity<?> cancelSchedule(@PathVariable("serviceId") Long serviceId) {
 
         try {
-            servicesService.cancelService(serviceId);
+            servicesService.cancelSchedule(serviceId);
 
             return ResponseEntity.ok().build();
         } catch (ServiceNotFoundException e) {

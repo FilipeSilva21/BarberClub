@@ -32,7 +32,8 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/auth/register", "/auth/login").permitAll()
                         .requestMatchers("/services/**").hasAnyRole("ADMIN", "BARBER")
                         .requestMatchers("/users/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/services/").hasRole("CLIENT")
+                        .requestMatchers(HttpMethod.POST, "/services/**").hasRole("CLIENT")
+                        .requestMatchers(HttpMethod.GET, "/services/**").hasRole("CLIENT")
                         .anyRequest().authenticated())
                 .exceptionHandling(exception -> exception
                         .accessDeniedHandler((request, response, accessDeniedException) -> {

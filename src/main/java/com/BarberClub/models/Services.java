@@ -27,8 +27,8 @@ public class Services {
     @Column(name = "services")
     private com.BarberClub.models.enums.Services services;
 
-    @Column(name = "horario")
-    private LocalDateTime horario;
+    @Column(name = "schedule")
+    private LocalDateTime schedule;
 
     @Column(name = "price")
     private int price;

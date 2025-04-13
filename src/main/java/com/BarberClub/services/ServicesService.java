@@ -16,7 +16,7 @@ public class ServicesService {
     @Autowired
     private ServicesRepository servicesRepository;
 
-    public Long scheduleService(ScheduleServiceDTO dto, User user, Services service) {
+    public Long scheduleTime(ScheduleServiceDTO dto, User user, Services service) {
 
         if (service.getServices() == com.BarberClub.models.enums.Services.Cabelo){
             service.setPrice(40);
@@ -34,28 +34,28 @@ public class ServicesService {
         Services services = new Services(
                 null,
                 dto.services(),
-                dto.horario(),
+                dto.schedule(),
                 service.getPrice(),
                 user
         );
 
-        var scheduledService = servicesRepository.save(services);
+        var scheduledTime = servicesRepository.save(services);
 
-        return scheduledService.getServiceId();
+        return scheduledTime.getServiceId();
     }
 
-    public List<Services> getAllServices() {
+    public List<Services> getAllSchedules() {
         return servicesRepository.findAll();
     }
 
-    public void cancelService(Long Id) {
+    public void cancelSchedule(Long Id) {
         if (!servicesRepository.existsById(Id)) {
             throw new ServiceNotFoundException("Serviço com Id " + Id + " não encontrado para cancelamento.");
         }
         servicesRepository.deleteById(Id);
     }
 
-    public List<Services> getServicesFromClient(Long userId) {
+    public List<Services> getSchedulesFromClient(Long userId) {
         List<Services> userServices = servicesRepository.findByUserId(userId);
         if (userServices.isEmpty()) {
             throw new ServiceNotFoundException("Nenhum serviço encontrado para o usuário com ID " + userId);
