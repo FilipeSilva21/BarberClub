@@ -1,5 +1,6 @@
 package com.BarberClub.models;
 
+import com.BarberClub.models.enums.Services;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -15,20 +15,20 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "tb_services")
-public class Services {
+@Table(name = "tb_schedules")
+public class Schedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "service_id")
-    private Long serviceId;
+    @Column(name = "schedule_id")
+    private Long scheduleId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "services")
-    private com.BarberClub.models.enums.Services services;
+    private Services services;
 
-    @Column(name = "schedule")
-    private LocalDateTime schedule;
+    @Column(name = "scheduleTime")
+    private LocalDateTime scheduleTime;
 
     @Column(name = "price")
     private int price;

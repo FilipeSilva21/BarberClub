@@ -1,11 +1,11 @@
 package com.BarberClub.controllers;
 
-import com.BarberClub.DTOs.ScheduleServiceDTO;
+import com.BarberClub.DTOs.ScheduleTimeDTO;
 import com.BarberClub.infra.ExceptionHandler.Exceptions.ServiceNotFoundException;
 import com.BarberClub.infra.ExceptionHandler.Exceptions.UserNotFoundException;
-import com.BarberClub.models.Services;
+import com.BarberClub.models.Schedule;
 import com.BarberClub.models.User;
-import com.BarberClub.services.ServicesService;
+import com.BarberClub.services.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,16 +14,16 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/services")
-public class ServicesController {
+public class ScheduleController {
 
     @Autowired
-    private ServicesService servicesService;
+    private ScheduleSer scheduleService;
 
     @PostMapping("/{userId}")
-    public ResponseEntity<?> scheduleTime(@RequestBody ScheduleServiceDTO dto, @PathVariable User userId, Services services) {
+    public ResponseEntity<?> scheduleTime(@RequestBody ScheduleTimeDTO dto, @PathVariable User userId, Schedule schedule) {
 
         try {
-            var serviceId = servicesService.scheduleTime(dto, userId, services);
+            var serviceId = scheduleService.scheduleTime(dto, userId, schedule);
 
             return ResponseEntity.created(URI.create("v1/services/" + serviceId)).build();
         } catch (UserNotFoundException | ServiceNotFoundException e) {
@@ -37,7 +37,7 @@ public class ServicesController {
     public ResponseEntity<?> listSchedules() {
 
         try {
-            var services = servicesService.getAllSchedules();
+            var services = scheduleService.getAllSchedules();
 
             return ResponseEntity.ok(services);
         } catch (Exception e) {
@@ -49,7 +49,7 @@ public class ServicesController {
     public ResponseEntity<?> getSchedulesFromUser(@PathVariable("userId") Long userId) {
 
         try {
-            var services = servicesService.getSchedulesFromClient(userId);
+            var services = scheduleService.getSchedulesFromClient(userId);
 
             return ResponseEntity.ok(services);
         } catch (UserNotFoundException e) {
@@ -63,7 +63,7 @@ public class ServicesController {
     public ResponseEntity<?> cancelSchedule(@PathVariable("serviceId") Long serviceId) {
 
         try {
-            servicesService.cancelSchedule(serviceId);
+            scheduleService.cancelScheduleTime(serviceId);
 
             return ResponseEntity.ok().build();
         } catch (ServiceNotFoundException e) {

@@ -1,7 +1,7 @@
 package com.BarberClub.controllers;
 
 import com.BarberClub.DTOs.LoginDTO;
-import com.BarberClub.DTOs.LoginResponseDTO;
+import com.BarberClub.DTOs.TokenResponseDTO;
 import com.BarberClub.DTOs.RegisterDTO;
 import com.BarberClub.infra.ExceptionHandler.Exceptions.EmailAlreadyExistsException;
 import com.BarberClub.infra.TokenService;
@@ -49,7 +49,7 @@ public class AuthController {
 
             var token = tokenService.generateToken((User) auth.getPrincipal());
 
-            return ResponseEntity.ok(new LoginResponseDTO(token));
+            return ResponseEntity.ok(new TokenResponseDTO(token));
         } catch (EmailAlreadyExistsException e) {
             throw e;
         } catch (Exception e) {
@@ -68,7 +68,7 @@ public class AuthController {
 
             var token = tokenService.generateToken((User) auth.getPrincipal());
 
-            return ResponseEntity.ok(new LoginResponseDTO(token));
+            return ResponseEntity.ok(new TokenResponseDTO(token));
         } catch (BadCredentialsException e) {
             throw e;
         } catch (Exception e) {
