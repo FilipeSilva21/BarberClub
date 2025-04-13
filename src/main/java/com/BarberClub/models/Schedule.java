@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -27,8 +28,11 @@ public class Schedule {
     @Column(name = "services")
     private Services services;
 
+    @Column(name = "scheduleDate")
+    private LocalDate date;
+
     @Column(name = "scheduleTime")
-    private LocalDateTime scheduleTime;
+    private int scheduleTime;
 
     @Column(name = "price")
     private int price;

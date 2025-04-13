@@ -30,10 +30,10 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/auth/register", "/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/services/**").hasRole("CLIENT")
+                        .requestMatchers(HttpMethod.GET, "/services").hasRole("CLIENT")
                         .requestMatchers("/services/**").hasAnyRole("ADMIN", "BARBER")
                         .requestMatchers("/users/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/services/**").hasRole("CLIENT")
-                        .requestMatchers(HttpMethod.GET, "/services/**").hasRole("CLIENT")
                         .anyRequest().authenticated())
                 .exceptionHandling(exception -> exception
                         .accessDeniedHandler((request, response, accessDeniedException) -> {

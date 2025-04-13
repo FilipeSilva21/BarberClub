@@ -35,6 +35,7 @@ public class ScheduleService {
         Schedule schedules = new Schedule(
                 null,
                 dto.services(),
+                dto.scheduleDate(),
                 dto.scheduleTime(),
                 schedule.getPrice(),
                 user
