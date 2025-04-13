@@ -33,9 +33,8 @@ public class AuthController {
     public ResponseEntity<?> registerUser(@RequestBody @Valid RegisterDTO dto) {
 
         try {
-            if (userRepository.findByEmail(dto.email()) != null) {
+            if (userRepository.findByEmail(dto.email()) != null)
                 throw new EmailAlreadyExistsException("Usuário já cadastrado com esse email");
-            }
 
             String encryptedPassword = new BCryptPasswordEncoder().encode(dto.password());
 
@@ -61,7 +60,6 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody @Valid LoginDTO dto) {
 
         try {
-
             var usernamePassword = new UsernamePasswordAuthenticationToken(dto.email(), dto.password());
 
             var auth = authenticationManager.authenticate(usernamePassword);

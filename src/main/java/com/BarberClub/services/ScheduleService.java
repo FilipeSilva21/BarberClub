@@ -20,18 +20,17 @@ public class ScheduleService {
 
     public Long scheduleTime(ScheduleTimeDTO dto, User user, Schedule schedule) {
 
-        if (dto.services() == Services.Cabelo){
+        if (dto.services() == Services.Cabelo)
             schedule.setPrice(40);
-        }
-        if (dto.services() == Services.Barba){
+
+        if (dto.services() == Services.Barba)
             schedule.setPrice(20);
-        }
-        if (dto.services() == Services.CabeloEBarba){
+
+        if (dto.services() == Services.CabeloEBarba)
             schedule.setPrice(55);
-        }
-        if (dto.services() == Services.Sobrancelha){
+
+        if (dto.services() == Services.Sobrancelha)
             schedule.setPrice(15);
-        }
 
         Schedule schedules = new Schedule(
                 null,

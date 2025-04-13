@@ -23,8 +23,9 @@ public class UserController {
     public ResponseEntity<?> getAllUsers() {
 
         try {
+            var getAllUsers = userService.listUsers();
 
-            return ResponseEntity.ok(userRepository.findAll());
+            return ResponseEntity.ok(getAllUsers);
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Erro ao buscar usuarios: " + e.getMessage());
         }
