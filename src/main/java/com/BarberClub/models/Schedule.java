@@ -35,7 +35,7 @@ public class Schedule {
     private int scheduleTime;
 
     @Column(name = "price")
-    private int price;
+    private double price;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

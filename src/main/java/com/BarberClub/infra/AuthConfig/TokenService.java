@@ -1,4 +1,4 @@
-package com.BarberClub.infra;
+package com.BarberClub.infra.AuthConfig;
 
 import com.BarberClub.models.User;
 import com.auth0.jwt.JWT;

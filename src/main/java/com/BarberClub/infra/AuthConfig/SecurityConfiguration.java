@@ -1,4 +1,4 @@
-package com.BarberClub.infra;
+package com.BarberClub.infra.AuthConfig;
 
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;

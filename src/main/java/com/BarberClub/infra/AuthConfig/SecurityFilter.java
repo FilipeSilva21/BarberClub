@@ -1,4 +1,4 @@
-package com.BarberClub.infra;
+package com.BarberClub.infra.AuthConfig;
 
 import com.BarberClub.repositories.UserRepository;
 import jakarta.servlet.FilterChain;

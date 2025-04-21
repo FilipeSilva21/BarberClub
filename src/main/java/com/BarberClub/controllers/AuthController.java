@@ -4,7 +4,7 @@ import com.BarberClub.DTOs.LoginDTO;
 import com.BarberClub.DTOs.TokenResponseDTO;
 import com.BarberClub.DTOs.RegisterDTO;
 import com.BarberClub.infra.ExceptionHandler.Exceptions.EmailAlreadyExistsException;
-import com.BarberClub.infra.TokenService;
+import com.BarberClub.infra.AuthConfig.TokenService;
 import com.BarberClub.models.User;
 import com.BarberClub.repositories.UserRepository;
 import jakarta.validation.Valid;
